@@ -4,7 +4,7 @@ import random
 from colorama import Fore, Style, init
 
 init(autoreset=True)  # Initialize colorama
-DEBUG = True
+DEBUG = True # Debug messages on/off
 
 WELCOME_ART = [
     r"""
@@ -47,7 +47,7 @@ class MagicalChatServer:
         print(f"{Fore.CYAN}🐾 Waiting for magical creatures to connect...")
         
         if DEBUG:
-            print("[DEBUG] Entering client acception loop")
+            print("[DEBUG] Entering client acceptance loop")
         while True:
             client_socket, addr = self.server_socket.accept()
             print(f"{Fore.GREEN}🔗 New connection from {addr}")
@@ -57,6 +57,8 @@ class MagicalChatServer:
             )
             client_thread.daemon = True  # Make thread daemon so it exits when main thread exits
             client_thread.start()
+            if DEBUG:
+                print("[DEBUG] Thread created and running")
 
     def broadcast(self, message, sender=None):
         with self.lock:
@@ -68,8 +70,11 @@ class MagicalChatServer:
                     except Exception as e:
                         print(f"{Fore.RED}💥 Error broadcasting message: {e}")
                         self.clients.remove(client)
+                        if DEBUG:
+                            print("[DEBUG] Removing missing/bad client")
 
     def handle_client(self, client_socket, addr):
+        # Updated once recieved from client
         username = "Unknown"
         try:
             # Send welcome message with randomized ASCII art

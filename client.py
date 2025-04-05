@@ -80,26 +80,26 @@ class MagicalChatClient:
                     self.running = False
                     break
                 
-                # Print received data
+                # Print recieved data
                 print(data)
                 
                 # Handle username prompt specifically
                 if waiting_for_username_prompt and "Enter your magic name" in data:
                     if DEBUG:
-                        print(f"{Fore.CYAN}[DEBUG] Username prompt detected")
+                        print(f"[DEBUG] Username prompt detected")
                     
                     with self.input_lock:
                         self.username = input()
                     
                     if DEBUG:
-                        print(f"{Fore.CYAN}[DEBUG] Sending username: {self.username}")
+                        print(f"[DEBUG] Sending username: {self.username}")
                     
                     self.send_message(self.username)
                     waiting_for_username_prompt = False
                     self.username_set = True
                     
                     if DEBUG:
-                        print(f"{Fore.CYAN}[DEBUG] Username sent, waiting for confirmation...")
+                        print(f"[DEBUG] Username sent, waiting for confirmation...")
                 
             except Exception as e:
                 if self.running:  # Only show error if we didn't disconnect intentionally
