@@ -97,12 +97,12 @@ class MagicalChatServer:
         except Exception as e:
             print(f"{Fore.RED}🔥 Connection error with {addr} ({username}): {e}")
         finally:
+            leave_msg = f"\n{Fore.YELLOW}🍂 {username} vanished in a puff of glitter! ✨\n"
+            self.broadcast(leave_msg)
             with self.lock:
                 try:
                     if (client_socket, username) in self.clients:
                         self.clients.remove((client_socket, username))
-                        leave_msg = f"\n{Fore.YELLOW}🍂 {username} vanished in a puff of glitter! ✨\n"
-                        self.broadcast(leave_msg)
                 except:
                     pass
                 
