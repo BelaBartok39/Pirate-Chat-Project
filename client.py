@@ -14,6 +14,8 @@ class MagicalChatClient:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.username = None
         self.running = True
+        self.username_set = False
+        self.input_lock = threading.Lock()
 
     def connect(self):
         try:
@@ -25,17 +27,24 @@ class MagicalChatClient:
             receive_thread.daemon = True
             receive_thread.start()
             
-            # Handle user input in the main thread
-            self.handle_user_input()
+            # Wait for username prompt and handle it in receive thread
+            while not self.username_set and self.running:
+                time.sleep(0.1)
+            
+            # Handle user input in the main thread once username is set
+            if self.running:
+                self.handle_user_input()
             
         except Exception as e:
             print(f"{Fore.RED}Connection error: {e}")
     
     def handle_user_input(self):
         try:
+            print(f"{Fore.CYAN}You can now chat. Type /quit to exit.")
             while self.running:
                 # Wait for user input
-                message = input("")
+                with self.input_lock:
+                    message = input()
                 
                 # Check for quit command
                 if message.lower() == '/quit':
@@ -43,7 +52,8 @@ class MagicalChatClient:
                     break
                 
                 # Send the message
-                self.send_message(message)
+                if message.strip():
+                    self.send_message(message)
                 
         except KeyboardInterrupt:
             self.disconnect()
@@ -58,6 +68,8 @@ class MagicalChatClient:
             print(f"{Fore.RED}Message send error: {e}")
 
     def receive_messages(self):
+        waiting_for_username_prompt = True
+        
         while self.running:
             try:
                 data = self.socket.recv(1024).decode('utf-8')
@@ -66,19 +78,27 @@ class MagicalChatClient:
                     self.running = False
                     break
                 
+                # Print received data
                 print(data)
                 
-                # If we're prompted for a username
-                if "Enter your magic name" in data:
+                # Handle username prompt specifically
+                if waiting_for_username_prompt and "Enter your magic name" in data:
                     if DEBUG:
                         print(f"{Fore.CYAN}[DEBUG] Username prompt detected")
-                    self.username = input(f"{Fore.CYAN}Enter your magical name: ")
+                    
+                    with self.input_lock:
+                        self.username = input(f"{Fore.CYAN}Enter your magical name: ")
+                    
                     if DEBUG:
                         print(f"{Fore.CYAN}[DEBUG] Sending username: {self.username}")
+                    
                     self.send_message(self.username)
+                    waiting_for_username_prompt = False
+                    self.username_set = True
+                    
                     if DEBUG:
                         print(f"{Fore.CYAN}[DEBUG] Username sent, waiting for confirmation...")
-                    
+                
             except Exception as e:
                 if self.running:  # Only show error if we didn't disconnect intentionally
                     print(f"{Fore.RED}Receive error: {e}")

@@ -50,7 +50,6 @@ class MagicalChatServer:
             )
             client_thread.daemon = True  # Make thread daemon so it exits when main thread exits
             client_thread.start()
-            # Remove the join() call - this was blocking the server from accepting new connections
 
     def broadcast(self, message, sender=None):
         with self.lock:
