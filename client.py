@@ -87,7 +87,7 @@ class MagicalChatClient:
                         print(f"{Fore.CYAN}[DEBUG] Username prompt detected")
                     
                     with self.input_lock:
-                        self.username = input(f"{Fore.CYAN}Enter your magical name: ")
+                        self.username = input()
                     
                     if DEBUG:
                         print(f"{Fore.CYAN}[DEBUG] Sending username: {self.username}")
