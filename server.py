@@ -43,15 +43,18 @@ class MagicalChatServer:
         
         while True:
             client_socket, addr = self.server_socket.accept()
+            print(f"{Fore.GREEN}🔗 New connection from {addr}")
             client_thread = threading.Thread(
                 target=self.handle_client,
                 args=(client_socket, addr)
             )
+            client_thread.daemon = True  # Make thread daemon so it exits when main thread exits
             client_thread.start()
-            client_thread.join()
+            # Remove the join() call - this was blocking the server from accepting new connections
 
     def broadcast(self, message, sender=None):
         with self.lock:
+            print(f"{Fore.MAGENTA}📢 Broadcasting: {message}")
             for client in self.clients:
                 if client != sender:
                     try:
@@ -61,6 +64,7 @@ class MagicalChatServer:
                         self.clients.remove(client)
 
     def handle_client(self, client_socket, addr):
+        username = "Unknown"
         try:
             # Send welcome message with random ASCII art
             art = random.choice(WELCOME_ART)
@@ -70,6 +74,7 @@ class MagicalChatServer:
             # Get username
             client_socket.send(f"{Fore.CYAN}🔮 Enter your magic name: ".encode('utf-8'))
             username = client_socket.recv(1024).decode('utf-8').strip()
+            print(f"{Fore.GREEN}🧙 User {username} joined from {addr}")
             
             with self.lock:
                 self.clients.append((client_socket, username))
@@ -82,6 +87,8 @@ class MagicalChatServer:
                 if not message:
                     break
                 
+                print(f"{Fore.BLUE}📩 Message from {username}: {message}")
+                
                 if message.lower() == '/quit':
                     break
                 
@@ -89,13 +96,22 @@ class MagicalChatServer:
                 self.broadcast(msg, (client_socket, username))
                 
         except Exception as e:
-            print(f"{Fore.RED}🔥 Connection error with {addr}: {e}")
+            print(f"{Fore.RED}🔥 Connection error with {addr} ({username}): {e}")
         finally:
             with self.lock:
-                self.clients.remove((client_socket, username))
-                leave_msg = f"\n{Fore.YELLOW}🍂 {username} vanished in a puff of glitter! ✨\n"
-                self.broadcast(leave_msg)
-                client_socket.close()
+                try:
+                    if (client_socket, username) in self.clients:
+                        self.clients.remove((client_socket, username))
+                        leave_msg = f"\n{Fore.YELLOW}🍂 {username} vanished in a puff of glitter! ✨\n"
+                        self.broadcast(leave_msg)
+                except:
+                    pass
+                
+                try:
+                    client_socket.close()
+                    print(f"{Fore.YELLOW}👋 Connection closed with {username} ({addr})")
+                except:
+                    pass
 
 if __name__ == "__main__":
     server = MagicalChatServer()

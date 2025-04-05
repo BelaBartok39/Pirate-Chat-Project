@@ -1,9 +1,11 @@
 import socket
 import threading
 import sys
+import time
 from colorama import init, Fore, Style
 
 init(autoreset=True)  # Initialize colorama
+DEBUG = True  # Set to True for debug messages
 
 class MagicalChatClient:
     def __init__(self, server_ip, server_port):
@@ -68,8 +70,14 @@ class MagicalChatClient:
                 
                 # If we're prompted for a username
                 if "Enter your magic name" in data:
-                    self.username = input("")
+                    if DEBUG:
+                        print(f"{Fore.CYAN}[DEBUG] Username prompt detected")
+                    self.username = input(f"{Fore.CYAN}Enter your magical name: ")
+                    if DEBUG:
+                        print(f"{Fore.CYAN}[DEBUG] Sending username: {self.username}")
                     self.send_message(self.username)
+                    if DEBUG:
+                        print(f"{Fore.CYAN}[DEBUG] Username sent, waiting for confirmation...")
                     
             except Exception as e:
                 if self.running:  # Only show error if we didn't disconnect intentionally
