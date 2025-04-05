@@ -1,61 +1,93 @@
 import socket
 import threading
+import sys
+from colorama import init, Fore, Style
 
+init(autoreset=True)  # Initialize colorama
 
-class ChatClient:
+class MagicalChatClient:
     def __init__(self, server_ip, server_port):
         self.server_ip = server_ip
         self.server_port = server_port
-        self.client_id = None
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.username = None
+        self.running = True
 
     def connect(self):
         try:
             self.socket.connect((self.server_ip, self.server_port))
-            self.client_id = self.socket.recv(1024).decode()
-            print(f"Connected as {self.client_id}")
-            threading.Thread(target=self.receive_messages, daemon=True).start()
+            print(f"{Fore.GREEN}Connected to the server!")
+            
+            # Start receiving messages in a separate thread
+            receive_thread = threading.Thread(target=self.receive_messages)
+            receive_thread.daemon = True
+            receive_thread.start()
+            
+            # Handle user input in the main thread
+            self.handle_user_input()
+            
         except Exception as e:
-            print(f"Connection error: {e}")
-
-    def send_message(self, recipient_id, message):
+            print(f"{Fore.RED}Connection error: {e}")
+    
+    def handle_user_input(self):
         try:
-            msg_data = f"{recipient_id}:{message}"
-            self.socket.sendall(msg_data.encode())
+            while self.running:
+                # Wait for user input
+                message = input("")
+                
+                # Check for quit command
+                if message.lower() == '/quit':
+                    self.disconnect()
+                    break
+                
+                # Send the message
+                self.send_message(message)
+                
+        except KeyboardInterrupt:
+            self.disconnect()
         except Exception as e:
-            print(f"Message send error: {e}")
+            print(f"{Fore.RED}Input error: {e}")
+            self.disconnect()
 
-    def request_client_list(self):
+    def send_message(self, message):
         try:
-            self.socket.sendall(b".list")
+            self.socket.sendall(message.encode('utf-8'))
         except Exception as e:
-            print(f"Client list request error: {e}")
+            print(f"{Fore.RED}Message send error: {e}")
 
     def receive_messages(self):
-        while True:
+        while self.running:
             try:
-                data = self.socket.recv(1024).decode()
+                data = self.socket.recv(1024).decode('utf-8')
                 if not data:
+                    print(f"{Fore.YELLOW}Server connection closed.")
+                    self.running = False
                     break
-                print(f"Message received: {data}")
+                
+                print(data)
+                
+                # If we're prompted for a username
+                if "Enter your magic name" in data:
+                    self.username = input("")
+                    self.send_message(self.username)
+                    
             except Exception as e:
-                print(f"Receive error: {e}")
+                if self.running:  # Only show error if we didn't disconnect intentionally
+                    print(f"{Fore.RED}Receive error: {e}")
                 break
 
     def disconnect(self):
+        self.running = False
         try:
-            self.socket.sendall(b".exit")
+            self.send_message('/quit')
             self.socket.close()
-            print("Disconnected from server.")
+            print(f"{Fore.YELLOW}Disconnected from server.")
         except Exception as e:
-            print(f"Disconnection error: {e}")
+            print(f"{Fore.RED}Disconnection error: {e}")
+        sys.exit(0)
 
 
 # Example usage
 if __name__ == "__main__":
-    client = ChatClient("127.0.0.1", 5000)
+    client = MagicalChatClient("127.0.0.1", 5050)
     client.connect()
-    # Example commands
-    client.request_client_list()
-    client.send_message("user123", "Hello!")
-    client.disconnect()
