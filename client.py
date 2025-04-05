@@ -5,7 +5,7 @@ import time
 from colorama import init, Fore, Style
 
 init(autoreset=True)  # Initialize colorama
-DEBUG = True  # Set to True for debug messages
+DEBUG = False  # Set to True for debug messages, False to turn off
 
 class MagicalChatClient:
     def __init__(self, server_ip, server_port):

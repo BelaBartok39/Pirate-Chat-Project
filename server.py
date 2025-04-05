@@ -65,7 +65,7 @@ class MagicalChatServer:
     def handle_client(self, client_socket, addr):
         username = "Unknown"
         try:
-            # Send welcome message with random ASCII art
+            # Send welcome message with randomized ASCII art
             art = random.choice(WELCOME_ART)
             welcome_msg = f"\n{Fore.MAGENTA}{art}\n{Fore.GREEN}🌌 Welcome to the Magical Chat! 🌠\n"
             client_socket.send(welcome_msg.encode('utf-8'))
