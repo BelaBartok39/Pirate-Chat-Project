@@ -4,6 +4,8 @@ import sys
 import time
 from colorama import init, Fore, Style
 
+# TODO: Consider using a buffer mechanism for recieving messages
+
 init(autoreset=True)  # Initialize colorama
 DEBUG = False  # Set to True for debug messages, False to turn off
 
@@ -112,7 +114,7 @@ class MagicalChatClient:
             print(f"{Fore.YELLOW}Disconnected from server.")
         except Exception as e:
             print(f"{Fore.RED}Disconnection error: {e}")
-        sys.exit(0)
+        return
 
 
 # Example usage

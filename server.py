@@ -4,6 +4,7 @@ import random
 from colorama import Fore, Style, init
 
 init(autoreset=True)  # Initialize colorama
+DEBUG = True
 
 WELCOME_ART = [
     r"""
@@ -36,11 +37,17 @@ class MagicalChatServer:
         self.lock = threading.Lock()
 
     def start(self):
+        if DEBUG:
+          print("[DEBUG] Starting server")
         self.server_socket.bind((self.host, self.port))
         self.server_socket.listen(5)
+        if DEBUG:
+            print("[DEBUG] Server started and waiting for connections")
         print(f"{Fore.YELLOW}✨ Server listening on {self.host}:{self.port}")
         print(f"{Fore.CYAN}🐾 Waiting for magical creatures to connect...")
         
+        if DEBUG:
+            print("[DEBUG] Entering client acception loop")
         while True:
             client_socket, addr = self.server_socket.accept()
             print(f"{Fore.GREEN}🔗 New connection from {addr}")
@@ -97,16 +104,22 @@ class MagicalChatServer:
         except Exception as e:
             print(f"{Fore.RED}🔥 Connection error with {addr} ({username}): {e}")
         finally:
+            if DEBUG:
+                print("[DEBUG] Attempting to quit gracefully")
             leave_msg = f"\n{Fore.YELLOW}🍂 {username} vanished in a puff of glitter! ✨\n"
             self.broadcast(leave_msg)
             with self.lock:
                 try:
+                    if DEBUG:
+                        print("[DEBUG] Removing client from client list.")
                     if (client_socket, username) in self.clients:
                         self.clients.remove((client_socket, username))
                 except:
                     pass
                 
                 try:
+                    if DEBUG:
+                        print("[DEBUG] Closing client socket")
                     client_socket.close()
                     print(f"{Fore.YELLOW}👋 Connection closed with {username} ({addr})")
                 except:
