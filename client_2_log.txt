@@ -25,3 +25,5 @@ Connected to the server!
     \___)=(___/ 
     
 Receive error: 'charmap' codec can't encode character '\U0001f30c' in position 0: character maps to <undefined>
+Active code page: 65001
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
