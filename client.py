@@ -6,6 +6,8 @@ from colorama import init, Fore, Style
 
 # TODO: Consider using a buffer mechanism for recieving messages
 
+sys.stdout.reconfigure(encoding='utf-8') # Ensure terminal can handle emojis
+
 init(autoreset=True)  # Initialize colorama
 DEBUG = False  # Set to True for debug messages, False to turn off
 
@@ -80,10 +82,13 @@ class MagicalChatClient:
                     self.running = False
                     break
                 
-                # Print recieved data
-                print(data)
+                try:
+                    print(data)
+                except UnicodeEncodeError as e:
+                    print(f"Unicode display error: {e}")
+                    print(f"Message (safely encoded): {data.encode('ascii', 'replace').decode('ascii')}")
                 
-                # Handle username prompt specifically
+                # Handle username prompt gracefully
                 if waiting_for_username_prompt and "Enter your magic name" in data:
                     if DEBUG:
                         print(f"[DEBUG] Username prompt detected")

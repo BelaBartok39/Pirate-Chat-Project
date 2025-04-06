@@ -3,12 +3,12 @@ import time
 import sys
 import os
 
-# Configure test options
+
 SERVER_IP = "127.0.0.1"
 SERVER_PORT = 5050
 
 def clear_screen():
-    """Clear the terminal screen."""
+    """Clears the terminal screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def print_header():
@@ -45,18 +45,15 @@ def run_client(client_number):
     """Start a chat client."""
     print(f"\nStarting client {client_number}...")
     try:
-        if os.name == 'nt':
-            # Windows: Create a new console window and log to file
-            log_file = f"client_{client_number}_log.txt"
-            log_mode = "a" if os.path.exists(log_file) else "w"
+
+        if os.name == 'nt':  
+            # Windows
             client_process = subprocess.Popen(
                 ["cmd", "/c", "chcp 65001 && python client.py"],
-                creationflags=subprocess.CREATE_NEW_CONSOLE,
-                stdout=open(log_file, log_mode),
-                stderr=subprocess.STDOUT
+                creationflags=subprocess.CREATE_NEW_CONSOLE
             )
         else:
-            # Unix-like: Use a new terminal window
+            # Linux, need's x-term
             client_process = subprocess.Popen(
                 ["xterm", "-e", f"{sys.executable} client.py"],
                 stdout=subprocess.PIPE,
