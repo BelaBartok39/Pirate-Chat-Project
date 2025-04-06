@@ -24,14 +24,17 @@ def run_server():
     print("\nStarting server...")
     try:
         if os.name == 'nt':
+            # Windows: Create a new console window
             server_process = subprocess.Popen(
                 ["cmd", "/c", "chcp 65001 && python server.py"],
                 creationflags=subprocess.CREATE_NEW_CONSOLE
             )
         else:
+            # Unix-like: Use a new terminal window
             server_process = subprocess.Popen(
-                [sys.executable, "server.py"],
-                creationflags=0
+                ["xterm", "-e", f"{sys.executable} server.py"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
             )
         return server_process
     except Exception as e:
@@ -43,14 +46,21 @@ def run_client(client_number):
     print(f"\nStarting client {client_number}...")
     try:
         if os.name == 'nt':
+            # Windows: Create a new console window and log to file
+            log_file = f"client_{client_number}_log.txt"
+            log_mode = "a" if os.path.exists(log_file) else "w"
             client_process = subprocess.Popen(
                 ["cmd", "/c", "chcp 65001 && python client.py"],
-                creationflags=subprocess.CREATE_NEW_CONSOLE
+                creationflags=subprocess.CREATE_NEW_CONSOLE,
+                stdout=open(log_file, log_mode),
+                stderr=subprocess.STDOUT
             )
         else:
+            # Unix-like: Use a new terminal window
             client_process = subprocess.Popen(
-                [sys.executable, "client.py"],
-                creationflags=0
+                ["xterm", "-e", f"{sys.executable} client.py"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
             )
         return client_process
     except Exception as e:
