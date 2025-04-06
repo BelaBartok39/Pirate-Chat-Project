@@ -6,3 +6,22 @@ Active code page: 65001
 Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
 Active code page: 65001
 Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
+Active code page: 65001
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
+Parameter format not correct - C:\Users\Nicholas\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\python.exe
+Parameter format not correct - C:\Users\Nicholas\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\python.exe
+Active code page: 65001
+Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases.
+Active code page: 65001
+Connected to the server!
+
+
+    .--. 
+    |o_o | 
+    |:_/ | 
+    //   \ \ 
+    (|     | ) 
+    /'\_   _/`\ 
+    \___)=(___/ 
+    
+Receive error: 'charmap' codec can't encode character '\U0001f30c' in position 0: character maps to <undefined>
