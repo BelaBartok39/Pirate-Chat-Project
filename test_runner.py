@@ -45,10 +45,9 @@ def run_client(client_number):
     """Start a chat client."""
     print(f"\nStarting client {client_number}...")
     try:
-
-        if os.name == 'nt':  
-            # Windows
-            client_process = subprocess.Popen(
+        if os.name == 'nt':
+            # Windows: Create a new console window and log to file
+            server_process = subprocess.Popen(
                 ["cmd", "/c", "chcp 65001 && python client.py"],
                 creationflags=subprocess.CREATE_NEW_CONSOLE
             )
@@ -59,7 +58,7 @@ def run_client(client_number):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
-        return client_process
+    
     except Exception as e:
         print(f"Error starting client {client_number}: {e}")
         return None
