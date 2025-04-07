@@ -47,13 +47,9 @@ def run_client(client_number):
     try:
         if os.name == 'nt':
             # Windows: Create a new console window and log to file
-            log_file = f"client_{client_number}_log.txt"
-            log_mode = "a" if os.path.exists(log_file) else "w"
-            client_process = subprocess.Popen(
+            server_process = subprocess.Popen(
                 ["cmd", "/c", "chcp 65001 && python client.py"],
-                creationflags=subprocess.CREATE_NEW_CONSOLE,
-                stdout=open(log_file, log_mode),
-                stderr=subprocess.STDOUT
+                creationflags=subprocess.CREATE_NEW_CONSOLE
             )
         else:
             # Unix-like: Use a new terminal window
@@ -62,7 +58,7 @@ def run_client(client_number):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
-        return client_process
+    
     except Exception as e:
         print(f"Error starting client {client_number}: {e}")
         return None
