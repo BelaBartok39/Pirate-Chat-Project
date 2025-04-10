@@ -1,4 +1,5 @@
 import threading 
+
 import socket
 import random
 from colorama import Fore, Style, init
@@ -28,7 +29,7 @@ WELCOME_ART = [
     """
 ]
 
-class MagicalChatServer:
+class PirateChatServer:
     def __init__(self, host='0.0.0.0', port=5050):
         self.host = host
         self.port = port
@@ -79,18 +80,18 @@ class MagicalChatServer:
         try:
             # Send welcome message with randomized ASCII art
             art = random.choice(WELCOME_ART)
-            welcome_msg = f"\n{Fore.MAGENTA}{art}\n{Fore.GREEN}🌌 Welcome to the Magical Chat! 🌠\n"
+            welcome_msg = f"\n{Fore.MAGENTA}{art}\n{Fore.GREEN}☠️ Welcome to Pirate Chat! ☠️\n"
             client_socket.send(welcome_msg.encode('utf-8'))
             
             # Get username
-            client_socket.send(f"{Fore.CYAN}🔮 Enter your magic name: ".encode('utf-8'))
+            client_socket.send(f"{Fore.CYAN}🔮 Enter your pirate name: ".encode('utf-8'))
             username = client_socket.recv(1024).decode('utf-8').strip()
             print(f"{Fore.GREEN}🧙 User {username} joined from {addr}")
             
             with self.lock:
                 self.clients.append((client_socket, username))
             
-            join_msg = f"\n{Fore.YELLOW}🌟 {username} has entered the enchanted forest! 🌳\n"
+            join_msg = f"\n{Fore.YELLOW}🌟 {username} has entered the high seas! 🌳\n"
             self.broadcast(join_msg, (client_socket, username))
             
             while True:
@@ -98,7 +99,7 @@ class MagicalChatServer:
                 if not message:
                     break
                 
-                print(f"{Fore.BLUE}📩 Message from {username}: {message}")
+                print(f"{Fore.BLUE}📩 Message in a bottle from {username}: {message}")
                 
                 if message.lower() == '/quit':
                     break
@@ -111,7 +112,7 @@ class MagicalChatServer:
         finally:
             if DEBUG:
                 print("[DEBUG] Attempting to quit gracefully")
-            leave_msg = f"\n{Fore.YELLOW}🍂 {username} vanished in a puff of glitter! ✨\n"
+            leave_msg = f"\n{Fore.YELLOW}🍂 {username} jumped overboard! ✨\n"
             self.broadcast(leave_msg)
             with self.lock:
                 try:
@@ -131,5 +132,5 @@ class MagicalChatServer:
                     pass
 
 if __name__ == "__main__":
-    server = MagicalChatServer()
+    server = PirateChatServer()
     server.start()

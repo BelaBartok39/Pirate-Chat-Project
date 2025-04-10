@@ -11,7 +11,7 @@ sys.stdout.reconfigure(encoding='utf-8') # Ensure terminal can handle emojis
 init(autoreset=True)  # Initialize colorama
 DEBUG = False  # Set to True for debug messages, False to turn off
 
-class MagicalChatClient:
+class PirateChatClient:
     def __init__(self, server_ip, server_port):
         self.server_ip = server_ip
         self.server_port = server_port
@@ -48,7 +48,7 @@ class MagicalChatClient:
             while self.running:
                 # Wait for user input
                 with self.input_lock:
-                    message = input()
+                    message = input("<You>")
                 
                 # Check for quit command
                 if message.lower() == '/quit':
@@ -89,7 +89,7 @@ class MagicalChatClient:
                     print(f"Message (safely encoded): {data.encode('ascii', 'replace').decode('ascii')}")
                 
                 # Handle username prompt gracefully
-                if waiting_for_username_prompt and "Enter your magic name" in data:
+                if waiting_for_username_prompt and "Enter your pirate name" in data:
                     if DEBUG:
                         print(f"[DEBUG] Username prompt detected")
                     
@@ -124,5 +124,5 @@ class MagicalChatClient:
 
 # Example usage
 if __name__ == "__main__":
-    client = MagicalChatClient("127.0.0.1", 5050)
+    client = PirateChatClient("127.0.0.1", 5050)
     client.connect()
