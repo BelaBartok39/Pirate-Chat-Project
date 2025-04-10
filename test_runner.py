@@ -14,7 +14,7 @@ def clear_screen():
 def print_header():
     """Print test header information."""
     print("=" * 50)
-    print("MAGICAL CHAT TESTER")
+    print("PIRATE CHAT TESTER")
     print("=" * 50)
     print(f"Server: {SERVER_IP}:{SERVER_PORT}")
     print("=" * 50)

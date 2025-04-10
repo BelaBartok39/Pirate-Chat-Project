@@ -8,24 +8,21 @@ init(autoreset=True)  # Initialize colorama
 DEBUG = True # Debug messages on/off
 
 WELCOME_ART = [
-    r"""
-    (\\_/)
-    (o.o)
-    (> <)
-    """,
-    r"""
-     /\_/\\
-    ( o.o )
-     > ^ <
-    """,
-    r"""
-    .--. 
-    |o_o | 
-    |:_/ | 
-    //   \ \ 
-    (|     | ) 
-    /'\_   _/`\ 
-    \___)=(___/ 
+    """
+888888888888888888888888888888888888888888888888888888888888
+888888888888888888888888888888888888888888888888888888888888
+8888888888888888888888888P""  ""9888888888888888888888888888
+8888888888888888P"88888P          988888"9888888888888888888
+8888888888888888  "9888            888P"  888888888888888888
+888888888888888888bo "9  d8o  o8b  P" od88888888888888888888
+888888888888888888888bob 98"  "8P dod88888888888888888888888
+888888888888888888888888    db    88888888888888888888888888
+88888888888888888888888888      8888888888888888888888888888
+88888888888888888888888P"9bo  odP"98888888888888888888888888
+88888888888888888888P" od88888888bo "98888888888888888888888
+888888888888888888   d88888888888888b   88888888888888888888
+8888888888888888888oo8888888888888888oo888888888888888888888
+888888888888888888888888888888888888888888888888888888888888
     """
 ]
 
@@ -45,7 +42,7 @@ class PirateChatServer:
         if DEBUG:
             print("[DEBUG] Server started and waiting for connections")
         print(f"{Fore.YELLOW}✨ Server listening on {self.host}:{self.port}")
-        print(f"{Fore.CYAN}🐾 Waiting for magical creatures to connect...")
+        print(f"{Fore.CYAN} Waiting for pirates creatures to connect...")
         
         if DEBUG:
             print("[DEBUG] Entering client acceptance loop")
@@ -78,7 +75,7 @@ class PirateChatServer:
         # Updated once recieved from client
         username = "Unknown"
         try:
-            # Send welcome message with randomized ASCII art
+            # Send welcome message with ASCII art
             art = random.choice(WELCOME_ART)
             welcome_msg = f"\n{Fore.MAGENTA}{art}\n{Fore.GREEN}☠️ Welcome to Pirate Chat! ☠️\n"
             client_socket.send(welcome_msg.encode('utf-8'))
