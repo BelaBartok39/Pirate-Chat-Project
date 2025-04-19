@@ -1,28 +1,31 @@
 # Component Analysis
 
-## Server (`server.py`)
+## Server (`pirate_server.py`)
 
 - Creates a socket server that accepts multiple client connections.
 - Uses threading to handle multiple clients simultaneously.
 - Implements broadcasting to send messages to all connected clients.
 - Manages client connections and graceful disconnections.
 - Features colorful output with `Colorama` and ASCII art for welcome messages.
+- Implements a `.list` command to allow clients to see all connected users.
 
-## Client (`client.py`)
+## Client (`pirate_client.py`)
 
 - Connects to the server using socket communication.
 - Implements separate threads for receiving messages and handling user input.
 - Uses a thread lock mechanism to prevent input conflicts.
 - Manages connection state and handles graceful disconnection.
 - Implements color-coded messages using `Colorama` for better user experience.
+- Supports the `.list` command to request and display a list of connected users.
 
-## Test Controller (`test_clients.py`)
+## Test Controller (`test_runner.py`)
 
 - Orchestrates the testing of the chat system.
 - Launches the server and multiple client instances in separate console windows.
 - Configures test parameters through user input.
 - Manages process lifecycle and termination.
 - Logs client activities to files (on Windows).
+- Fixed references to `pirate_server.py` to ensure proper server execution.
 
 ---
 
