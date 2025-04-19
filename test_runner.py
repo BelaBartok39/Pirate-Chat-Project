@@ -26,13 +26,13 @@ def run_server():
         if os.name == 'nt':
             # Windows: Create a new console window
             server_process = subprocess.Popen(
-                ["cmd", "/c", "chcp 65001 && python server.py"],
+                ["cmd", "/c", "chcp 65001 && python pirate_server.py"],
                 creationflags=subprocess.CREATE_NEW_CONSOLE
             )
         else:
             # Unix-like: Use a new terminal window
             server_process = subprocess.Popen(
-                ["xterm", "-e", f"{sys.executable} server.py"],
+                ["xterm", "-e", f"{sys.executable} pirate_server.py"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
@@ -48,13 +48,13 @@ def run_client(client_number):
         if os.name == 'nt':
             # Windows: Create a new console window and log to file
             server_process = subprocess.Popen(
-                ["cmd", "/c", "chcp 65001 && python client.py"],
+                ["cmd", "/c", "chcp 65001 && python pirate_client.py"],
                 creationflags=subprocess.CREATE_NEW_CONSOLE
             )
         else:
             # Linux, need's x-term
             client_process = subprocess.Popen(
-                ["xterm", "-e", f"{sys.executable} client.py"],
+                ["xterm", "-e", f"{sys.executable} pirate_client.py"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )

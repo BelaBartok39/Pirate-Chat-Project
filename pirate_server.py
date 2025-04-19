@@ -72,7 +72,6 @@ class PirateChatServer:
                             print("[DEBUG] Removing missing/bad client")
 
     def handle_client(self, client_socket, addr):
-        # Updated once recieved from client
         username = "Unknown"
         try:
             # Send welcome message with ASCII art
@@ -101,28 +100,30 @@ class PirateChatServer:
                 if message.lower() == '/quit':
                     break
                 
+                # Handle .list command
+                if message.lower() == '.list':
+                    with self.lock:
+                        client_list = [client[1] for client in self.clients]
+                    client_list_message = f"{Fore.CYAN}🌊 Connected pirates: {', '.join(client_list)}"
+                    client_socket.send(client_list_message.encode('utf-8'))
+                    continue
+                
                 msg = f"{Fore.BLUE}🧚 {username}: {Style.RESET_ALL}{message}"
                 self.broadcast(msg, (client_socket, username))
                 
         except Exception as e:
             print(f"{Fore.RED}🔥 Connection error with {addr} ({username}): {e}")
         finally:
-            if DEBUG:
-                print("[DEBUG] Attempting to quit gracefully")
             leave_msg = f"\n{Fore.YELLOW}🍂 {username} jumped overboard! ✨\n"
             self.broadcast(leave_msg)
             with self.lock:
                 try:
-                    if DEBUG:
-                        print("[DEBUG] Removing client from client list.")
                     if (client_socket, username) in self.clients:
                         self.clients.remove((client_socket, username))
                 except:
                     pass
                 
                 try:
-                    if DEBUG:
-                        print("[DEBUG] Closing client socket")
                     client_socket.close()
                     print(f"{Fore.YELLOW}👋 Connection closed with {username} ({addr})")
                 except:
