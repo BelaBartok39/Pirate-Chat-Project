@@ -51,6 +51,7 @@ class PirateChatServer:
         while True:
             client_socket, addr = self.server_socket.accept()
             client_socket = self.ssl_context.wrap_socket(client_socket, server_side=True)
+            print("[DEBUG] SSL handshake completed")
             print(f"{Fore.GREEN}🔗 New connection from {addr}")
             client_thread = threading.Thread(
                 target=self.handle_client,
@@ -100,7 +101,7 @@ class PirateChatServer:
                 
                 print(f"{Fore.BLUE}📩 Message in a bottle from {username}: {message}")
                 
-                if message.lower() == '/quit':
+                if message.lower() == '.quit':
                     break
                 
                 # Handle .list command
@@ -134,5 +135,4 @@ class PirateChatServer:
 
 if __name__ == "__main__":
     server = PirateChatServer()
-    print("[DEBUG] SSL handshake completed")
     server.start()

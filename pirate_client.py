@@ -54,10 +54,10 @@ class PirateChatClient:
             while self.running:
                 # Wait for user input
                 with self.input_lock:
-                    message = input("<You>")
+                    message = input()
                 
                 # Check for quit command
-                if message.lower() == '/quit':
+                if message.lower() == '.quit':
                     self.disconnect()
                     break
                 
