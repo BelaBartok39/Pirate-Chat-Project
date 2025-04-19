@@ -45,6 +45,7 @@ class PirateChatClient:
     def handle_user_input(self):
         try:
             print(f"{Fore.CYAN}You can now chat. Type /quit to exit.")
+            print(f"{Fore.CYAN}Type .list to see who is here.")
             while self.running:
                 # Wait for user input
                 with self.input_lock:
