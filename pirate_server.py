@@ -1,5 +1,5 @@
 import threading 
-
+import ssl
 import socket
 import random
 from colorama import Fore, Style, init
@@ -31,6 +31,8 @@ class PirateChatServer:
         self.host = host
         self.port = port
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+        self.ssl_context.load_cert_chain(certfile="server.crt", keyfile="server.key")
         self.clients = []
         self.lock = threading.Lock()
 
@@ -48,6 +50,7 @@ class PirateChatServer:
             print("[DEBUG] Entering client acceptance loop")
         while True:
             client_socket, addr = self.server_socket.accept()
+            client_socket = self.ssl_context.wrap_socket(client_socket, server_side=True)
             print(f"{Fore.GREEN}🔗 New connection from {addr}")
             client_thread = threading.Thread(
                 target=self.handle_client,
@@ -131,4 +134,5 @@ class PirateChatServer:
 
 if __name__ == "__main__":
     server = PirateChatServer()
+    print("[DEBUG] SSL handshake completed")
     server.start()

@@ -1,2 +1,4 @@
 
 client_*_log.txt
+server.crt
+server.key

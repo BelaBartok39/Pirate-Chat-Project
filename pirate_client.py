@@ -2,6 +2,7 @@ import socket
 import threading
 import sys
 import time
+import ssl
 from colorama import init, Fore, Style
 
 # TODO: Consider using a buffer mechanism for recieving messages
@@ -13,9 +14,12 @@ DEBUG = False  # Set to True for debug messages, False to turn off
 
 class PirateChatClient:
     def __init__(self, server_ip, server_port):
-        self.server_ip = server_ip
+        context = ssl.create_default_context()
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
+        self.server_host = server_ip
         self.server_port = server_port
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket = context.wrap_socket(socket.socket(socket.AF_INET, socket.SOCK_STREAM), server_hostname=self.server_host)
         self.username = None
         self.running = True
         self.username_set = False
@@ -23,7 +27,8 @@ class PirateChatClient:
 
     def connect(self):
         try:
-            self.socket.connect((self.server_ip, self.server_port))
+            self.socket.connect((self.server_host, self.server_port))
+            print("[DEBUG] SSL handshake completed")
             print(f"{Fore.GREEN}Connected to the server!")
             
             # Start receiving messages in a separate thread
