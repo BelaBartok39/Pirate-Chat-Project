@@ -7,6 +7,7 @@ import os
 SERVER_IP = "127.0.0.1"
 SERVER_PORT = 5050
 
+ 
 def clear_screen():
     """Clears the terminal screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
