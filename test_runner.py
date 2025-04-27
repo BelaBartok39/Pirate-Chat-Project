@@ -53,7 +53,7 @@ def run_client(client_number):
                 creationflags=subprocess.CREATE_NEW_CONSOLE
             )
         else:
-            # Linux, need's x-term
+            # Linux, DONT FORGET this need's x-term to work
             client_process = subprocess.Popen(
                 ["xterm", "-e", f"{sys.executable} pirate_client.py"],
                 stdout=subprocess.PIPE,
@@ -96,10 +96,10 @@ def main():
     print("Close the console windows when you're done testing.")
     print("=" * 50)
 
-    # Wait for user to end test
+    # Wait for user to end test...
     input("Press Enter to terminate all processes and end the test...")
 
-    # Clean up processes
+    # cslean up
     for name, process in processes:
         print(f"Terminating {name}...")
         try:
